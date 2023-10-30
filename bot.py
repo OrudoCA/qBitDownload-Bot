@@ -20,8 +20,7 @@ def home():
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     file = telebot.types.KeyboardButton('File')
     magnet = telebot.types.KeyboardButton('MagnetLink')
-    keyboard.add(file)
-    keyboard.add(magnet)
+    keyboard.add(file,magnet)
     return keyboard
 
 # Login
@@ -43,10 +42,13 @@ def folder_menu():
     else:
         keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         i = 0  
+        global folder_list
+        folder_list = []
         lst = []
         for folder in folders.keys():
             globals()[f'var_{i}'] = telebot.types.KeyboardButton(f'{folder}')
             lst.append(f'var_{i}')
+            folder_list.append(folder)
             i += 1
         for var in lst:
             keyboard.add(globals()[var])
@@ -73,12 +75,13 @@ def rm(message):
     f = func.del_dir(id,folder)
     bot.reply_to(message,str(f),reply_markup=home())
 
-
 # Magnet
 @bot.message_handler(func=lambda message: message.text == 'MagnetLink')
 def magnet(message):
     id = message.from_user.id
     if func.auth_check(id):
+        global type
+        type = 'magnet'
         f = folder_menu()
         if f == None:
             bot.reply_to(message,'No folders, use /add <folder_name> <path>')
@@ -87,11 +90,27 @@ def magnet(message):
     else:
         bot.reply_to(message,'Log in to use bot /login <passwd>')
 
+# Dir choose
+def dirchoose(message):
+    global dir
+    dir = message.text
+    if type == 'magnet':
+        bot.reply_to(message,'Send magnet link')
+
 # Unknown message
 @bot.message_handler(func=lambda message: True)
 def unknown(message):
+    global type, dir, folder_list
     id = message.from_user.id
     if func.auth_check(id):
+        txt = message.text
+        if txt in folder_list:
+            dirchoose(message)
+            return None
+        if dir != None and type == 'magnet':
+            f = func.magnet(id,txt,dir)
+            dir, type, folder_list = None,None,[]
+            bot.reply_to(message,f)
         bot.reply_to(message,'Choose download type:',reply_markup=home())
     else:
         bot.reply_to(message,'Log in to use bot /login <passwd>')

@@ -57,8 +57,13 @@ def del_dir(id,dir):
 
 def magnet(id,link,dir):
     if auth_check(id):
-        subprocess.run(f"qbt torrent add url {link} -f {dir}", check=True, shell=True)
+        dict = db.read(DIR_FILE)
+        path = dict[dir]
+        command = f'''qbt torrent add url "{link} -f {path}"'''
+        os.system(f"bash -c '{command}'")
         return 'Success'
+    else:
+        return 'Log in first'
 
 def file(id,file,dir):
     if auth_check(id):
