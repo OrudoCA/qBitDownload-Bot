@@ -9,14 +9,14 @@ def u_auth(id,passwd):
     if db.check('obj',AUTH_FILE):
         list = db.read(AUTH_FILE)
     if id in list:
-        return 'You already logged in'
+        return 'Вы уже авторизированны'
     else:
         if passwd == os.environ['PASS']: 
             list.append(id)
             db.write(list,AUTH_FILE)
-            return 'Success'
+            return 'Вы успешно авторизировались'
         else:
-            return 'Wrong password'
+            return 'Неверный пароль'
 
 def auth_check(id):
     if db.check('obj',AUTH_FILE):
@@ -29,16 +29,16 @@ def auth_check(id):
 def add_dir(id,dir,path):
     if auth_check(id):
         if os.path.exists(path) == False:
-            return 'Folder not exist on host'
+            return f"Директории '{path}' не сушествует на сервере"
         if db.check('obj',DIR_FILE):
             dict = db.read(DIR_FILE)
         else:
             dict = {}
         dict.setdefault(dir,path)
         db.write(dict,DIR_FILE)
-        return 'Success'
+        return f"Папка {dir} успешно добавлена"
     else:
-        return 'Log in first'
+        return 'Этот бот запривачен, гнида, блять'
 
 def del_dir(id,dir):
     if auth_check(id):
@@ -49,11 +49,11 @@ def del_dir(id,dir):
         if dir in dict:
             del dict[dir]
             db.write(dict,DIR_FILE)
-            return 'Success'
+            return f"Папка {dir} успешно удалена"
         else:
-            return 'Dir not exists'
+            return f"Папки {dir} не существует"
     else:
-        return 'Log in first'
+        return 'Этот бот запривачен, гнида, блять'
 
 def magnet(id,link,dir):
     if auth_check(id):
@@ -61,9 +61,9 @@ def magnet(id,link,dir):
         path = dict[dir]
         command = f'''qbt torrent add url "{link} -f {path}"'''
         os.system(f"bash -c '{command}'")
-        return 'Success'
+        return 'Torrent добавлен в очередь'
     else:
-        return 'Log in first'
+        return 'Этот бот запривачен, гнида, блять'
 
 def file(id,file,dir):
     if auth_check(id):
@@ -72,9 +72,9 @@ def file(id,file,dir):
         command = f'''qbt torrent add file "{file}" -f {path}'''
         os.system(f"bash -c '{command}'")
         os.remove(file)
-        return 'Success'
+        return 'Torrent добавлен в очередь'
     else:
-        return 'Log in first'
+        return 'Этот бот запривачен, гнида, блять'
 
 def dirlist():
     dirs = {}
