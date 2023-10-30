@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -- coding: utf-8 --
 
-import db, os, subprocess
+import db, os 
 from db import *
 
 def u_auth(id,passwd):
@@ -67,9 +67,14 @@ def magnet(id,link,dir):
 
 def file(id,file,dir):
     if auth_check(id):
-        subprocess.run(f"qbt torrent add file {PATH}{file} -f {dir}", check=True, shell=True)
-        os.remove(f'{PATH}{file}')
+        dict = db.read(DIR_FILE)
+        path = dict[dir]
+        command = f'''qbt torrent add file "{file}" -f {path}'''
+        os.system(f"bash -c '{command}'")
+        os.remove(file)
         return 'Success'
+    else:
+        return 'Log in first'
 
 def dirlist():
     dirs = {}

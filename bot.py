@@ -2,9 +2,11 @@
 # -- coding: utf-8 --
 
 import func, telebot, os
+from db import PATH
 
 TOKEN = os.environ["TOKEN"]
 bot = telebot.TeleBot(TOKEN)
+folder_list = []
 
 # Start
 @bot.message_handler(commands=['start'])
@@ -90,12 +92,52 @@ def magnet(message):
     else:
         bot.reply_to(message,'Log in to use bot /login <passwd>')
 
+# File
+@bot.message_handler(func=lambda message: message.text == 'File')
+def file(message):
+    id = message.from_user.id
+    if func.auth_check(id):
+        global type
+        type = 'file'
+        f = folder_menu()
+        if f == None:
+            bot.reply_to(message,'No folders, use /add <folder_name> <path>')
+        else:
+            bot.reply_to(message,'Choose dir:',reply_markup=f)
+    else:
+        bot.reply_to(message,'Log in to use bot /login <passwd>')
+
+# File download
+@bot.message_handler(content_types=['document'])
+def download(message):
+    id = message.from_user.id
+    if func.auth_check(id):
+        global type, dir, folder_list
+        if dir != None and type == 'file':
+            if message.document.file_name.lower().endswith('.torrent'):
+                file_info = bot.get_file(message.document.file_id)
+                file_path = file_info.file_path
+                file = bot.download_file(file_path)
+                file_name = os.path.join(PATH, message.document.file_name)
+                with open(file_name, 'wb') as dl:
+                    dl.write(file)
+                f = func.file(id,file_name,dir)
+                dir, type, folder_list = None,None,[]
+                bot.reply_to(message,f)
+            else:
+                bot.reply_to(message,'Send .torrent file')
+        bot.reply_to(message,'Choose download type:',reply_markup=home())
+    else:
+        bot.reply_to(message,'Log in to use bot /login <passwd>')
+
 # Dir choose
 def dirchoose(message):
     global dir
     dir = message.text
     if type == 'magnet':
         bot.reply_to(message,'Send magnet link')
+    if type == 'file':
+        bot.reply_to(message,'Send .torrent file')
 
 # Unknown message
 @bot.message_handler(func=lambda message: True)
