@@ -3,6 +3,7 @@
 
 import func, telebot, os
 from db import PATH
+from lang import LANG as msg
 
 TOKEN = os.environ["TOKEN"]
 bot = telebot.TeleBot(TOKEN)
@@ -14,15 +15,15 @@ dir = None
 def welcome(message):
     id = message.from_user.id
     if func.auth_check(id):
-        bot.reply_to(message,'Выберите тип загрузки:',reply_markup=home())
+        bot.reply_to(message,str(msg.get('type')),reply_markup=home())
     else:
-        bot.reply_to(message,'Этот бот запривачен, гнида, блять')
+        bot.reply_to(message,str(msg.get('adeny')))
 
 # Keyboard: Homepage
 def home():
     keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    file = telebot.types.KeyboardButton('Файл')
-    magnet = telebot.types.KeyboardButton('Magnet-ссылка')
+    file = telebot.types.KeyboardButton(str(msg.get('file')))
+    magnet = telebot.types.KeyboardButton(str(msg.get('magnet')))
     keyboard.add(file,magnet)
     return keyboard
 
@@ -31,8 +32,8 @@ def home():
 def login(message):
     id = message.from_user.id
     passwd = message.text.replace('/login ', '')
-    f = func.u_auth(id,passwd)
-    if f == 'Вы успешно авторизировались' or f == 'Вы уже авторизированны':
+    f = str(func.u_auth(id,passwd))
+    if f == str(msg.get('sucauth')) or f == str(msg.get('alauth')):
         bot.reply_to(message,f,reply_markup=home())
     else:
         bot.reply_to(message,f)
@@ -65,9 +66,9 @@ def add(message):
     if len(txt) == 3:
         key = txt[1]
         path = txt[2]
-        f = func.add_dir(id,key,path)
+        f = str(func.add_dir(id,key,path))
     else:
-        f = 'Неверные аргументы'
+        f = str(msg.get('aerr'))
     bot.reply_to(message,f,reply_markup=home())
 
 # Folder del
@@ -79,7 +80,7 @@ def rm(message):
     bot.reply_to(message,str(f),reply_markup=home())
 
 # Magnet
-@bot.message_handler(func=lambda message: message.text == 'Magnet-ссылка')
+@bot.message_handler(func=lambda message: message.text == str(msg.get('magnet')))
 def magnet(message):
     id = message.from_user.id
     if func.auth_check(id):
@@ -87,14 +88,14 @@ def magnet(message):
         type = 'magnet'
         f = folder_menu()
         if f == None:
-            bot.reply_to(message,'Папок не обнаруженно, воспользуйтесь коммандой /add')
+            bot.reply_to(message,str(msg.get('cff')))
         else:
-            bot.reply_to(message,'Выберите папку:',reply_markup=f)
+            bot.reply_to(message,str(msg.get('chf')),reply_markup=f)
     else:
-        bot.reply_to(message,'Этот бот запривачен, гнида, блять')
+        bot.reply_to(message,str(msg.get('adeny')))
 
 # File
-@bot.message_handler(func=lambda message: message.text == 'Файл')
+@bot.message_handler(func=lambda message: message.text == str(msg.get('file')))
 def file(message):
     id = message.from_user.id
     if func.auth_check(id):
@@ -102,11 +103,11 @@ def file(message):
         type = 'file'
         f = folder_menu()
         if f == None:
-            bot.reply_to(message,'Папок не обнаруженно, воспользуйтесь коммандой /add')
+            bot.reply_to(message,str(msg.get('cff')))
         else:
-            bot.reply_to(message,'Выберите папку:',reply_markup=f)
+            bot.reply_to(message,str(msg.get('chf')),reply_markup=f)
     else:
-        bot.reply_to(message,'Этот бот запривачен, гнида, блять')
+        bot.reply_to(message,str(msg.get('adeny')))
 
 # File download
 @bot.message_handler(content_types=['document'])
@@ -122,23 +123,23 @@ def download(message):
                 file_name = os.path.join(PATH, message.document.file_name)
                 with open(file_name, 'wb') as dl:
                     dl.write(file)
-                f = func.file(id,file_name,dir)
+                f = str(func.file(id,file_name,dir))
                 dir, type, folder_list = None,None,[]
                 bot.reply_to(message,f)
             else:
-                bot.reply_to(message,'Неверное расширение файла')
-        bot.reply_to(message,'Выберите тип загрузки:',reply_markup=home())
+                bot.reply_to(message,str(msg.get('ntorr')))
+        bot.reply_to(message,str(msg.get('type')),reply_markup=home())
     else:
-        bot.reply_to(message,'Этот бот запривачен, гнида, блять')
+        bot.reply_to(message,str(msg.get('adeny')))
 
 # Dir choose
 def dirchoose(message):
     global dir
     dir = message.text
     if type == 'magnet':
-        bot.reply_to(message,'Отправте Magnet-ссылку')
+        bot.reply_to(message,str(msg.get('sendm')))
     if type == 'file':
-        bot.reply_to(message,'Отправте .torrent файл')
+        bot.reply_to(message,str(msg.get('sendf')))
 
 # Unknown message
 @bot.message_handler(func=lambda message: True)
@@ -151,12 +152,12 @@ def unknown(message):
             dirchoose(message)
             return None
         if dir != None and type == 'magnet':
-            f = func.magnet(id,txt,dir)
+            f = str(func.magnet(id,txt,dir))
             dir, type, folder_list = None,None,[]
             bot.reply_to(message,f)
-        bot.reply_to(message,'Выберите тип загрузки:',reply_markup=home())
+        bot.reply_to(message,str(msg.get('type')),reply_markup=home())
     else:
-        bot.reply_to(message,'Этот бот запривачен, гнида, блять')
+        bot.reply_to(message,str(msg.get('adeny')))
 
 func.qbt()
 bot.polling()

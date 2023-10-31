@@ -3,6 +3,7 @@
 
 import db, os 
 from db import *
+from lang import LANG as msg
 
 def qbt():
     url = os.environ['QURL']
@@ -21,14 +22,14 @@ def u_auth(id,passwd):
     if db.check('obj',AUTH_FILE):
         list = db.read(AUTH_FILE)
     if id in list:
-        return 'Вы уже авторизированны'
+        return msg.get('alauth')
     else:
         if passwd == os.environ['PASS']: 
             list.append(id)
             db.write(list,AUTH_FILE)
-            return 'Вы успешно авторизировались'
+            return msg.get('sucauth')
         else:
-            return 'Неверный пароль'
+            return msg.get('wrauth')
 
 def auth_check(id):
     if db.check('obj',AUTH_FILE):
@@ -41,16 +42,16 @@ def auth_check(id):
 def add_dir(id,dir,path):
     if auth_check(id):
         if os.path.exists(path) == False:
-            return f"Директории '{path}' не сушествует на сервере"
+            return str(msg.get('pne')).format(path)
         if db.check('obj',DIR_FILE):
             dict = db.read(DIR_FILE)
         else:
             dict = {}
         dict.setdefault(dir,path)
         db.write(dict,DIR_FILE)
-        return f"Папка {dir} успешно добавлена"
+        return str(msg.get('fsa')).format(dir)
     else:
-        return 'Этот бот запривачен, гнида, блять'
+        return msg.get('adeny')
 
 def del_dir(id,dir):
     if auth_check(id):
@@ -61,21 +62,21 @@ def del_dir(id,dir):
         if dir in dict:
             del dict[dir]
             db.write(dict,DIR_FILE)
-            return f"Папка {dir} успешно удалена"
+            return str(msg.get('frm')).format(dir)
         else:
-            return f"Папки {dir} не существует"
+            return str(msg.get('fne')).format(dir)
     else:
-        return 'Этот бот запривачен, гнида, блять'
+        return msg.get('adeny')
 
 def magnet(id,link,dir):
     if auth_check(id):
         dict = db.read(DIR_FILE)
         path = dict[dir]
-        command = f'''qbt torrent add url "{link} -f {path}"'''
+        command = f'''qbt torrent add url "{link}" -f "{path}"'''
         os.system(f"bash -c '{command}'")
-        return 'Torrent добавлен в очередь'
+        return msg.get('add')
     else:
-        return 'Этот бот запривачен, гнида, блять'
+        return msg.get('adeny')
 
 def file(id,file,dir):
     if auth_check(id):
@@ -84,9 +85,9 @@ def file(id,file,dir):
         command = f'''qbt torrent add file "{file}" -f {path}'''
         os.system(f"bash -c '{command}'")
         os.remove(file)
-        return 'Torrent добавлен в очередь'
+        return msg.get('add')
     else:
-        return 'Этот бот запривачен, гнида, блять'
+        return msg.get('adeny')
 
 def dirlist():
     dirs = {}

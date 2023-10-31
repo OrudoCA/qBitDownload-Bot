@@ -3,15 +3,35 @@
 
 import os
 
-def main():
-    lang = {}
-    env = os.environ['LANG']
-    if env == None:
-        lang = russian
-    return lang
+langs = ['RU']
 
-# RU
-russian = {}
+# Russian
+RU = {
+        'alauth': 'Вы уже авторизированны',
+        'sucauth': 'Вы успешно авторизировались',
+        'wrauth': 'Неверный пароль',
+        'pne': "Директории '{}' не сушествует на сервере",
+        'fsa': "Папка '{}' успешно добавлена",
+        'frm': "Папка '{}' успешно удалена", 
+        'fne': "Папки '{}' не существует",
+        'add': 'Torrent добавлен в очередь',
+        'type': 'Выберите тип загрузки:',
+        'magnet': 'Magnet-ссылка',
+        'file': 'Файл',
+        'aerr': 'Неверные аргументы',
+        'cff': 'Папок не обнаруженно, воспользуйтесь коммандой /add',
+        'chf': 'Выберите папку:',
+        'ntorr': 'Неверное расширение файла',
+        'sendm': 'Отправте Magnet-ссылку',
+        'sendf': 'Отправте .torrent файл',
+        'adeny': 'Этот бот запривачен, гнида, блять'
+        }
 
-# ENG
-english = {}
+# English
+ENG = {}
+
+for i in langs:
+    if i == os.environ['LANG']:
+        LANG = globals()[i]
+    else:
+        LANG = RU
