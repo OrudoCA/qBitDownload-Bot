@@ -3,7 +3,7 @@
 
 import os
 
-langs = ['RU','ENG']
+langs = ['ENG','RU']
 
 # Russian
 RU = {
@@ -50,5 +50,5 @@ ENG = {
         }
 
 for i in langs:
-    if i == os.environ.get('LANG','RU'):
+    if i == os.environ.get('LANG','ENG'):
         LANG = globals()[i]
