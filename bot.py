@@ -158,4 +158,5 @@ def unknown(message):
     else:
         bot.reply_to(message,'Этот бот запривачен, гнида, блять')
 
+func.qbt()
 bot.polling()

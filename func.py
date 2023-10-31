@@ -4,6 +4,18 @@
 import db, os 
 from db import *
 
+def qbt():
+    url = os.environ['QURL']
+    username = os.environ['QUSER']
+    password = os.environ['QPASS']
+    commands = [
+            f"qbt settings set url {url}",
+            f"qbt settings set username {username}",
+            f"echo {password} | qbt settings set password --no-warn"
+            ]
+    for command in commands:
+        os.system(f"bash -c '{command}'")
+
 def u_auth(id,passwd):
     list = []
     if db.check('obj',AUTH_FILE):
