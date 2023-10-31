@@ -71,7 +71,7 @@ def magnet(id,link,dir):
     if auth_check(id):
         dict = db.read(DIR_FILE)
         path = dict[dir]
-        command = f'''qbt torrent add url "{link} -f {path}"'''
+        command = f'''qbt torrent add url "{link}" -f "{path}"'''
         os.system(f"bash -c '{command}'")
         return 'Torrent добавлен в очередь'
     else:
