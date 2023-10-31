@@ -1,0 +1,14 @@
+services:
+  qbitdl_bot:
+    image: <YOUR_IMAGE_HERE>
+    container_name: qbitdl_bot
+    volumes:
+      - /path/to/config:/etc/bot
+      - /path/to/data/:/path/to/data
+    restart: 'unless-stopped'
+    environment:
+      TOKEN: "<YOUR_BOT_TOKEN_HERE>"
+      PASS: "change_me"
+      QURL: "<http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
+      QUSER: "<YOUR_QBIT_USERNAME>"
+      QPASS: "<YOUR_QBIT_PASSWORD>"
