@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -- coding: utf-8 --
 
-import db, os 
+import db, os, log, subprocess 
 from db import *
 from lang import LANG as msg
 
@@ -12,10 +12,12 @@ def qbt():
     commands = [
             f"qbt settings set url {url}",
             f"qbt settings set username {username}",
-            f"echo {password} | qbt settings set password --no-warn"
+            f"echo {password} | qbt settings set password --no-warn",
+            f"qbt server info "
             ]
     for command in commands:
         os.system(f"bash -c '{command}'")
+        output = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 def u_auth(id,passwd):
     list = []
@@ -27,6 +29,7 @@ def u_auth(id,passwd):
         if passwd == os.environ['PASS']: 
             list.append(id)
             db.write(list,AUTH_FILE)
+            log.auth(id)
             return msg.get('sucauth')
         else:
             return msg.get('wrauth')
@@ -49,6 +52,7 @@ def add_dir(id,dir,path):
             dict = {}
         dict.setdefault(dir,path)
         db.write(dict,DIR_FILE)
+        log.add(id,dir,path)
         return str(msg.get('fsa')).format(dir)
     else:
         return msg.get('adeny')
@@ -62,6 +66,7 @@ def del_dir(id,dir):
         if dir in dict:
             del dict[dir]
             db.write(dict,DIR_FILE)
+            log.rm(id,dir)
             return str(msg.get('frm')).format(dir)
         else:
             return str(msg.get('fne')).format(dir)
@@ -74,6 +79,7 @@ def magnet(id,link,dir):
         path = dict[dir]
         command = f'''qbt torrent add url "{link}" -f "{path}"'''
         os.system(f"bash -c '{command}'")
+        log.addmagnet(id,link)
         return msg.get('add')
     else:
         return msg.get('adeny')
@@ -85,6 +91,7 @@ def file(id,file,dir):
         command = f'''qbt torrent add file "{file}" -f {path}'''
         os.system(f"bash -c '{command}'")
         os.remove(file)
+        log.addfile(id,file)
         return msg.get('add')
     else:
         return msg.get('adeny')

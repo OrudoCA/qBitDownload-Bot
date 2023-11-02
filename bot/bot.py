@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 # -- coding: utf-8 --
 
-import func, telebot, os
+import func, telebot, os, log, sys
 from db import PATH
 from lang import LANG as msg
 
-TOKEN = os.environ["TOKEN"]
+TOKEN = os.environ.get('TOKEN','None')
 bot = telebot.TeleBot(TOKEN)
 folder_list = []
 dir = None
@@ -159,5 +159,20 @@ def unknown(message):
     else:
         bot.reply_to(message,str(msg.get('adeny')))
 
-func.qbt()
-bot.polling()
+def run():
+    if os.path.exists(PATH) == False:
+        os.mkdir(PATH)
+    log.start()
+    try:
+        func.qbt()
+    except:
+        log.errqbt()
+        sys.exit(1)
+    try:
+        bot.polling()
+    except:
+        log.errtelebot()
+        sys.exit(1)
+
+if __name__ == "__main__":
+    run()

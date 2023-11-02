@@ -1,6 +1,7 @@
 services:
   qbitdl_bot:
     image: <YOUR_IMAGE_HERE>
+    tty: true
     container_name: qbitdl_bot
     volumes:
       - /path/to/config:/etc/bot
@@ -12,4 +13,4 @@ services:
       QURL: "<http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
       QUSER: "<YOUR_QBIT_USERNAME>"
       QPASS: "<YOUR_QBIT_PASSWORD>"
-      LANG: "RU"
+      LANG: "<YOUR_LANG>"

@@ -53,7 +53,7 @@ docker run \
  -e QUSER="<YOUR_QBIT_USERNAME>" \
  -e QPASS="<YOUR_QBIT_PASSWORD>" \
  -e LANG="YOUR_LANG" \
- -d your_image_here
+ -d -it your_image_here
 ```
 
 ##### or
@@ -63,6 +63,7 @@ docker run \
 services:
   qbitdl_bot:
     image: <YOUR_IMAGE_HERE>
+    tty: true
     container_name: qbitdl_bot
     volumes:
       - /path/to/config:/etc/bot
