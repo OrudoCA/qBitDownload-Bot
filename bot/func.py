@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -- coding: utf-8 --
 
-import db, os, log 
+import db, os, log, subprocess 
 from db import *
 from lang import LANG as msg
 
@@ -12,10 +12,12 @@ def qbt():
     commands = [
             f"qbt settings set url {url}",
             f"qbt settings set username {username}",
-            f"echo {password} | qbt settings set password --no-warn"
+            f"echo {password} | qbt settings set password --no-warn",
+            f"qbt server info "
             ]
     for command in commands:
         os.system(f"bash -c '{command}'")
+        output = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 def u_auth(id,passwd):
     list = []

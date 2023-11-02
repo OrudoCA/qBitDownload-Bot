@@ -27,12 +27,14 @@ RU = {
         'adeny': 'Этот бот запривачен, гнида, блять',
         # Logs
         'l_create': "Log Файл '{}' создан",
-        'l_start': 'Бот готов к работе',
+        'l_start': 'Запуск бота...',
         'l_auth': "Пользователь '{}' успешно авторизировался",
         'l_add': "Пользователь '{}' добавил папку '{}' по пути '{}'",
         'l_rm': "Пользователь '{}' удалил папку '{}'",
         'l_file': "Пользователь '{}' добавил в очередь файл '{}'",
-        'l_magnet': "Пользователь '{}' добавил в очередь ссылку '{}'"
+        'l_magnet': "Пользователь '{}' добавил в очередь ссылку '{}'",
+        'l_errqbt': "Ошибка подключения к qBitTorrent",
+        'l_errtele': "Ошибка подключения к Telegram API, проверьте ваш токен",
         }
 
 # English
@@ -57,12 +59,14 @@ ENG = {
         'adeny': "You do not have access, first authorize '/login <password>'",
         # Logs
         'l_create': "Log File '{}' created",
-        'l_start': 'Bot is up and running',
+        'l_start': 'Start bot polling...',
         'l_auth': "User '{}' successfully authorized",
         'l_add': "User '{}' added a folder '{}' with the path '{}'",
         'l_rm': "User '{}' deleted '{}' folder",
         'l_file': "User '{}' added file '{}' to the queue",
-        'l_magnet': "User '{}' added the link '{}' to the queue"
+        'l_magnet': "User '{}' added the link '{}' to the queue",
+        'l_errqbt': "Error connecting to qBitTorrent",
+        'l_errtele': "Error connecting to Telegram API, check your token"
         }
 
 for i in langs:

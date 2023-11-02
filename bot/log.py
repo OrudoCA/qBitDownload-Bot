@@ -53,3 +53,13 @@ def addmagnet(id,link):
     log = DEFAULT + str(msg.get('l_magnet').format(id,link))
     file(log)
     print(log)
+
+def errqbt():
+    log = DEFAULT + str(msg.get('l_errqbt'))
+    file(log)
+    print(log)
+
+def errtelebot():
+    log = DEFAULT + str(msg.get('l_errtele'))
+    file(log)
+    print(log)
