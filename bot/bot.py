@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -- coding: utf-8 --
 
-import func, telebot, os
+import func, telebot, os, log
 from db import PATH
 from lang import LANG as msg
 
@@ -159,5 +159,6 @@ def unknown(message):
     else:
         bot.reply_to(message,str(msg.get('adeny')))
 
-func.qbt()
+# func.qbt()
+log.start()
 bot.polling()
