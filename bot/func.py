@@ -19,7 +19,7 @@ def qbt():
         os.system(f"bash -c '{command}'")
         output = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-def u_auth(id,passwd):
+def u_auth(name,id,passwd):
     list = []
     if db.check('obj',AUTH_FILE):
         list = db.read(AUTH_FILE)
@@ -29,7 +29,7 @@ def u_auth(id,passwd):
         if passwd == os.environ['PASS']: 
             list.append(id)
             db.write(list,AUTH_FILE)
-            log.auth(id)
+            log.auth(name,id)
             return msg.get('sucauth')
         else:
             return msg.get('wrauth')
@@ -42,7 +42,7 @@ def auth_check(id):
     if id in list:
         return True
 
-def add_dir(id,dir,path):
+def add_dir(name,id,dir,path):
     if auth_check(id):
         if os.path.exists(path) == False:
             return str(msg.get('pne')).format(path)
@@ -52,12 +52,12 @@ def add_dir(id,dir,path):
             dict = {}
         dict.setdefault(dir,path)
         db.write(dict,DIR_FILE)
-        log.add(id,dir,path)
+        log.add(name,id,dir,path)
         return str(msg.get('fsa')).format(dir)
     else:
         return msg.get('adeny')
 
-def del_dir(id,dir):
+def del_dir(name,id,dir):
     if auth_check(id):
         if db.check('obj',DIR_FILE):
             dict = db.read(DIR_FILE)
@@ -66,32 +66,32 @@ def del_dir(id,dir):
         if dir in dict:
             del dict[dir]
             db.write(dict,DIR_FILE)
-            log.rm(id,dir)
+            log.rm(name,id,dir)
             return str(msg.get('frm')).format(dir)
         else:
             return str(msg.get('fne')).format(dir)
     else:
         return msg.get('adeny')
 
-def magnet(id,link,dir):
+def magnet(name,id,link,dir):
     if auth_check(id):
         dict = db.read(DIR_FILE)
         path = dict[dir]
         command = f'''qbt torrent add url "{link}" -f "{path}"'''
         os.system(f"bash -c '{command}'")
-        log.addmagnet(id,link)
+        log.addmagnet(name,id,link)
         return msg.get('add')
     else:
         return msg.get('adeny')
 
-def file(id,file,dir):
+def file(name,id,file,dir):
     if auth_check(id):
         dict = db.read(DIR_FILE)
         path = dict[dir]
         command = f'''qbt torrent add file "{file}" -f {path}'''
         os.system(f"bash -c '{command}'")
         os.remove(file)
-        log.addfile(id,file)
+        log.addfile(name,id,file)
         return msg.get('add')
     else:
         return msg.get('adeny')
