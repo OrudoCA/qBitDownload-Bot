@@ -29,28 +29,28 @@ def start():
     file(log2)
     print(f'{log1}\n{log2}')
 
-def auth(id):
-    log = DEFAULT + str(msg.get('l_auth').format(id))
+def auth(name,id):
+    log = DEFAULT + str(msg.get('l_auth').format(name,id))
     file(log)
     print(log)
 
-def add(id,folder,path):
-    log = DEFAULT + str(msg.get('l_add').format(id,folder,path))
+def add(name,id,folder,path):
+    log = DEFAULT + str(msg.get('l_add').format(name,id,folder,path))
     file(log)
     print(log)
 
-def rm(id,folder):
-    log = DEFAULT + str(msg.get('l_rm').format(id,folder))
+def rm(name,id,folder):
+    log = DEFAULT + str(msg.get('l_rm').format(name,id,folder))
     file(log)
     print(log)
 
-def addfile(id,filename):
-    log = DEFAULT + str(msg.get('l_file').format(id,filename[9:]))
+def addfile(name,id,filename):
+    log = DEFAULT + str(msg.get('l_file').format(name,id,filename[9:]))
     file(log)
     print(log)
 
-def addmagnet(id,link):
-    log = DEFAULT + str(msg.get('l_magnet').format(id,link))
+def addmagnet(name,id,link):
+    log = DEFAULT + str(msg.get('l_magnet').format(name,id,link))
     file(log)
     print(log)
 

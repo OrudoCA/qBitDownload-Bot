@@ -31,8 +31,9 @@ def home():
 @bot.message_handler(commands=['login'])
 def login(message):
     id = message.from_user.id
+    name = message.from_user.first_name
     passwd = message.text.replace('/login ', '')
-    f = str(func.u_auth(id,passwd))
+    f = str(func.u_auth(name,id,passwd))
     if f == str(msg.get('sucauth')) or f == str(msg.get('alauth')):
         bot.reply_to(message,f,reply_markup=home())
     else:
@@ -62,11 +63,12 @@ def folder_menu():
 @bot.message_handler(commands=['add'])
 def add(message):
     id = message.from_user.id
+    name = message.from_user.first_name
     txt = message.text.split(' ', 2)
     if len(txt) == 3:
         key = txt[1]
         path = txt[2]
-        f = str(func.add_dir(id,key,path))
+        f = str(func.add_dir(name,id,key,path))
     else:
         f = str(msg.get('aerr'))
     bot.reply_to(message,f,reply_markup=home())
@@ -75,8 +77,9 @@ def add(message):
 @bot.message_handler(commands=['del'])
 def rm(message):
     id = message.from_user.id
+    name = message.from_user.first_name
     folder = message.text.replace('/del ', '')
-    f = func.del_dir(id,folder)
+    f = func.del_dir(name,id,folder)
     bot.reply_to(message,str(f),reply_markup=home())
 
 # Magnet
@@ -113,6 +116,7 @@ def file(message):
 @bot.message_handler(content_types=['document'])
 def download(message):
     id = message.from_user.id
+    name = message.from_user.first_name
     if func.auth_check(id):
         global type, dir, folder_list
         if dir != None and type == 'file':
@@ -123,7 +127,7 @@ def download(message):
                 file_name = os.path.join(PATH, message.document.file_name)
                 with open(file_name, 'wb') as dl:
                     dl.write(file)
-                f = str(func.file(id,file_name,dir))
+                f = str(func.file(name,id,file_name,dir))
                 dir, type, folder_list = None,None,[]
                 bot.reply_to(message,f)
             else:
@@ -146,13 +150,14 @@ def dirchoose(message):
 def unknown(message):
     global type, dir, folder_list
     id = message.from_user.id
+    name = message.from_user.first_name
     if func.auth_check(id):
         txt = message.text
         if txt in folder_list:
             dirchoose(message)
             return None
         if dir != None and type == 'magnet':
-            f = str(func.magnet(id,txt,dir))
+            f = str(func.magnet(name,id,txt,dir))
             dir, type, folder_list = None,None,[]
             bot.reply_to(message,f)
         bot.reply_to(message,str(msg.get('type')),reply_markup=home())
