@@ -9,7 +9,7 @@ services:
     environment:
       TOKEN: "<YOUR_BOT_TOKEN_HERE>"
       PASS: "change_me"
-      QURL: "<http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
+      QURL: "http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
       QUSER: "<YOUR_QBIT_USERNAME>"
       QPASS: "<YOUR_QBIT_PASSWORD>"
       LANG: "<YOUR_LANG>"

@@ -49,7 +49,7 @@ docker run \
  -v /path/to/media:/path/to/media \
  -e TOKEN="<YOUR_BOT_TOKEN_HERE>" \
  -e PASS="change_me" \
- -e QURL="<http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>" \
+ -e QURL="http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>" \
  -e QUSER="<YOUR_QBIT_USERNAME>" \
  -e QPASS="<YOUR_QBIT_PASSWORD>" \
  -e LANG="YOUR_LANG" \
@@ -71,7 +71,7 @@ services:
     environment:
       TOKEN: "<YOUR_BOT_TOKEN_HERE>"
       PASS: "change_me"
-      QURL: "<http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
+      QURL: "http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
       QUSER: "<YOUR_QBIT_USERNAME>"
       QPASS: "<YOUR_QBIT_PASSWORD>"
       LANG: "<YOUR_LANG>"
@@ -79,6 +79,46 @@ services:
 
 ```bash
 docker compose up -d
+```
+
+---
+
+![](https://cloud.orudo.ru/apps/files_sharing/publicpreview/ffSABnXQ3cQrLZG?file=/&fileId=23851&x=1920&y=1200&a=true&etag=d2d4704b2ab90afe5edee647a19a5540)
+
+## Run natively:
+### 1. Install deps:
+- python3
+- py3-pip
+
+### 2. Install TeleBot lib:
+```bash
+pip install telebot
+```
+
+### 3. Set system ENV
+```bash
+# Linux
+export TOKEN="YOUR_BOT_TOKEN"
+export PASS="change_me"
+export QURL="http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
+export QUSER="<YOUR_QBIT_USERNAME>"
+export QPASS="<YOUR_QBIT_PASSWORD>"
+export LANG="<YOUR_LANG>"
+
+# Windows PS
+set TOKEN="YOUR_BOT_TOKEN"
+set PASS="change_me"
+set QURL="http://<YOUR_QBIT_SERVER_IP_HERE>:<PORT>"
+set QUSER="<YOUR_QBIT_USERNAME>"
+set QPASS="<YOUR_QBIT_PASSWORD>"
+set LANG="<YOUR_LANG>"
+```
+
+#### 3.1 On windows change PATH var in `db.py`
+
+### 4. Run
+```bash
+python3 bot.py
 ```
 ---
 
