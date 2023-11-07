@@ -53,6 +53,7 @@ docker run \
  -e QUSER="<YOUR_QBIT_USERNAME>" \
  -e QPASS="<YOUR_QBIT_PASSWORD>" \
  -e LANG="YOUR_LANG" \
+ -e TZ="Europe/Moscow" \
  -d -it your_image_here
 ```
 
@@ -76,6 +77,7 @@ services:
       QUSER: "<YOUR_QBIT_USERNAME>"
       QPASS: "<YOUR_QBIT_PASSWORD>"
       LANG: "<YOUR_LANG>"
+      TZ: "Europe/Moscow"
 ```
 
 ```bash
